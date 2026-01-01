@@ -5,6 +5,7 @@ import { createStackNavigator } from "@react-navigation/stack";
 import CreateProfileScreen from "../screens/CreateProfileScreen";
 import ProfileSelectScreen from "../screens/ProfileSelectScreen";
 import HomeScreen from "../screens/HomeScreen";
+import SettingsScreen from "../screens/SettingsScreen";
 
 const Stack = createStackNavigator();
 
@@ -78,15 +79,18 @@ export default function AppNavigator() {
             </Stack.Screen>
           </>
         ) : (
-          <Stack.Screen name="MainApp">
-            {(props) => (
-              <HomeScreen
-                {...props}
-                onLogout={checkAuth}
-                profileId={activeProfileId}
-              />
-            )}
-          </Stack.Screen>
+          <>
+            <Stack.Screen name="MainApp">
+              {(props) => (
+                <HomeScreen
+                  {...props}
+                  onLogout={checkAuth}
+                  profileId={activeProfileId}
+                />
+              )}
+            </Stack.Screen>
+            <Stack.Screen name="Settings" component={SettingsScreen} />
+          </>
         )}
       </Stack.Navigator>
     </NavigationContainer>

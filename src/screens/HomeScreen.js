@@ -18,7 +18,7 @@ const CATEGORIES = [
   { id: "stretch", label: "Йога", icon: "body", color: "#5856D6" },
 ];
 
-export default function HomeScreen({ profileId, onLogout }) {
+export default function HomeScreen({ navigation, profileId, onLogout }) {
   const [text, setText] = useState("");
   const [workouts, setWorkouts] = useState([]);
   const [selectedCat, setSelectedCat] = useState(CATEGORIES[0]); // По умолчанию Силовая
@@ -75,9 +75,19 @@ export default function HomeScreen({ profileId, onLogout }) {
     <View style={styles.container}>
       <View style={styles.topHeader}>
         <Text style={styles.header}>Мой Тренер 💪</Text>
-        <TouchableOpacity onPress={handleLogout} style={styles.logoutButton}>
-          <Ionicons name="log-out-outline" size={24} color="#FF3B30" />
-        </TouchableOpacity>
+        <View style={styles.headerButtons}>
+          <TouchableOpacity
+            onPress={() =>
+              navigation.navigate("Settings", { profileId, onLogout })
+            }
+            style={styles.iconButton}
+          >
+            <Ionicons name="settings-outline" size={24} color="#007AFF" />
+          </TouchableOpacity>
+          <TouchableOpacity onPress={handleLogout} style={styles.iconButton}>
+            <Ionicons name="log-out-outline" size={24} color="#FF3B30" />
+          </TouchableOpacity>
+        </View>
       </View>
 
       <View style={styles.card}>
@@ -189,8 +199,13 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginBottom: 20,
   },
-  logoutButton: {
+  headerButtons: {
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  iconButton: {
     padding: 5,
+    marginLeft: 15,
   },
   card: {
     backgroundColor: "#FFF",
