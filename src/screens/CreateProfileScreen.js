@@ -5,6 +5,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 export default function CreateProfileScreen({ onCheck }) {
   // Получаем onCheck из пропсов
   const [name, setName] = useState("");
+  const [password, setPassword] = useState("");
 
   const handleSave = async () => {
     if (name.trim().length > 0) {
@@ -12,6 +13,7 @@ export default function CreateProfileScreen({ onCheck }) {
         const newProfile = {
           id: Date.now().toString(),
           name: name,
+          password: password, // Store password
           createdAt: new Date(),
         };
 
@@ -49,6 +51,13 @@ export default function CreateProfileScreen({ onCheck }) {
         placeholder="Как вас зовут?"
         value={name}
         onChangeText={setName}
+      />
+      <TextInput
+        style={styles.input}
+        placeholder="Пароль (необязательно)"
+        value={password}
+        onChangeText={setPassword}
+        secureTextEntry
       />
       <Button title="Создать профиль" onPress={handleSave} />
     </View>

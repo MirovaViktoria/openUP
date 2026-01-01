@@ -6,6 +6,9 @@ import {
   TouchableOpacity,
   StyleSheet,
   ActivityIndicator,
+  Modal,
+  TextInput,
+  Alert,
 } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Ionicons } from "@expo/vector-icons";
@@ -13,6 +16,9 @@ import { Ionicons } from "@expo/vector-icons";
 export default function ProfileSelectScreen({ navigation, onSelectProfile }) {
   const [profiles, setProfiles] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [modalVisible, setModalVisible] = useState(false);
+  const [selectedProfile, setSelectedProfile] = useState(null);
+  const [inputPassword, setInputPassword] = useState("");
 
   useEffect(() => {
     loadProfiles();
@@ -31,7 +37,26 @@ export default function ProfileSelectScreen({ navigation, onSelectProfile }) {
     }
   };
 
-  const handleSelect = async (profileId) => {
+  const handleSelect = async (profile) => {
+    if (profile.password && profile.password.trim() !== "") {
+      setSelectedProfile(profile);
+      setInputPassword("");
+      setModalVisible(true);
+    } else {
+      await activateProfile(profile.id);
+    }
+  };
+
+  const verifyPassword = async () => {
+    if (inputPassword === selectedProfile.password) {
+      setModalVisible(false);
+      await activateProfile(selectedProfile.id);
+    } else {
+      Alert.alert("Ошибка", "Неверный пароль");
+    }
+  };
+
+  const activateProfile = async (profileId) => {
     await AsyncStorage.setItem("active_profile_id", profileId);
     onSelectProfile(); // Refresh app state
   };
@@ -43,13 +68,17 @@ export default function ProfileSelectScreen({ navigation, onSelectProfile }) {
   const renderItem = ({ item }) => (
     <TouchableOpacity
       style={styles.profileCard}
-      onPress={() => handleSelect(item.id)}
+      onPress={() => handleSelect(item)}
     >
       <View style={styles.avatarContainer}>
         <Ionicons name="person" size={30} color="#FFF" />
       </View>
       <Text style={styles.profileName}>{item.name}</Text>
-      <Ionicons name="chevron-forward" size={24} color="#C7C7CC" />
+      {item.password ? (
+        <Ionicons name="lock-closed" size={20} color="#999" style={{ marginRight: 10 }} />
+      ) : (
+        <Ionicons name="chevron-forward" size={24} color="#C7C7CC" />
+      )}
     </TouchableOpacity>
   );
 
@@ -79,6 +108,41 @@ export default function ProfileSelectScreen({ navigation, onSelectProfile }) {
         <Ionicons name="add-circle-outline" size={24} color="#FFF" />
         <Text style={styles.createButtonText}>Создать профиль</Text>
       </TouchableOpacity>
+
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={() => setModalVisible(false)}
+      >
+        <View style={styles.centeredView}>
+          <View style={styles.modalView}>
+            <Text style={styles.modalTitle}>Введите пароль</Text>
+            <TextInput
+              style={styles.modalInput}
+              placeholder="Пароль"
+              value={inputPassword}
+              onChangeText={setInputPassword}
+              secureTextEntry
+              autoFocus
+            />
+            <View style={styles.modalButtons}>
+              <TouchableOpacity
+                style={[styles.button, styles.buttonClose]}
+                onPress={() => setModalVisible(false)}
+              >
+                <Text style={styles.textStyle}>Отмена</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={[styles.button, styles.buttonOpen]}
+                onPress={verifyPassword}
+              >
+                <Text style={styles.textStyle}>Войти</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </View>
+      </Modal>
     </View>
   );
 }
@@ -154,5 +218,65 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     fontSize: 18,
     marginLeft: 10,
+  },
+  // Modal styles
+  centeredView: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "rgba(0,0,0,0.5)",
+  },
+  modalView: {
+    margin: 20,
+    backgroundColor: "white",
+    borderRadius: 20,
+    padding: 35,
+    alignItems: "center",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
+    width: "80%",
+  },
+  modalTitle: {
+    fontSize: 20,
+    marginBottom: 15,
+    textAlign: "center",
+    fontWeight: "bold",
+  },
+  modalInput: {
+    width: "100%",
+    borderBottomWidth: 1,
+    borderBottomColor: "#ccc",
+    padding: 10,
+    marginBottom: 20,
+    fontSize: 18,
+  },
+  modalButtons: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    width: "100%",
+  },
+  button: {
+    borderRadius: 10,
+    padding: 10,
+    elevation: 2,
+    minWidth: 100,
+    alignItems: "center",
+  },
+  buttonOpen: {
+    backgroundColor: "#007AFF",
+  },
+  buttonClose: {
+    backgroundColor: "#FF3B30",
+  },
+  textStyle: {
+    color: "white",
+    fontWeight: "bold",
+    textAlign: "center",
   },
 });

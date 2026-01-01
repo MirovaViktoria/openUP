@@ -11,6 +11,7 @@ const Stack = createStackNavigator();
 export default function AppNavigator() {
 
   const [activeProfileId, setActiveProfileId] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     checkAuth();
