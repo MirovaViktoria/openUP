@@ -1,7 +1,11 @@
 import React from "react";
-import "react-native-gesture-handler";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
 import AppNavigator from "./src/navigation/AppNavigator"; // проверь путь к файлу
 
 export default function App() {
-  return <AppNavigator />;
+  return (
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      <AppNavigator />
+    </GestureHandlerRootView>
+  );
 }
