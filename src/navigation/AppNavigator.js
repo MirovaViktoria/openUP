@@ -4,8 +4,7 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import CreateProfileScreen from "../screens/CreateProfileScreen";
 import ProfileSelectScreen from "../screens/ProfileSelectScreen";
-import SettingsScreen from "../screens/SettingsScreen";
-import DrawerNavigator from "./DrawerNavigator";
+import TabNavigator from "./TabNavigator";
 
 const Stack = createStackNavigator();
 
@@ -81,7 +80,7 @@ export default function AppNavigator() {
           <>
             <Stack.Screen name="MainApp">
               {(props) => (
-                <DrawerNavigator
+                <TabNavigator
                   {...props}
                   route={{
                     ...props.route,
@@ -94,13 +93,6 @@ export default function AppNavigator() {
                 />
               )}
             </Stack.Screen>
-            {/* SettingsScreen is now accessible via Drawer, but if we need it in Stack explicitly we can keep it, 
-                 but typically Drawer navigation handles it. If Settings opens a NEW stack page over drawer, keep it. 
-                 But Drawer usually contains it. Let's keep it here just in case specific navigation calls it from outside drawer?
-                 Actually, simpler to let Drawer handle it. But the DrawerNavigator code I wrote IMPORTS SettingsScreen. 
-                 So it's fine. I'll remove it from here to avoid confusion unless intended to be used outside drawer context.
-                 Current DrawerNavigator uses SettingsScreen as a drawer item.
-              */}
           </>
         )}
       </Stack.Navigator>
