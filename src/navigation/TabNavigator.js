@@ -101,6 +101,7 @@ export default function TabNavigator({ route }) {
             <Tab.Screen
                 name="Add"
                 component={AddActionScreen}
+                initialParams={{ profileId }}
                 options={{
                     tabBarIcon: ({ focused }) => (
                         <Ionicons name="add" size={40} color="#fff" />
