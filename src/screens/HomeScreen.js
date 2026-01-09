@@ -14,6 +14,7 @@ import {
 import { Ionicons } from "@expo/vector-icons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import DateTimePicker from "@react-native-community/datetimepicker";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 const CATEGORIES = [
   { id: "power", label: "Силовая", icon: "barbell", color: "#FF9500", defaultUnits: ["weight", "sets", "reps"] },
@@ -34,6 +35,9 @@ const UNITS = {
 };
 
 export default function HomeScreen({ navigation, profileId, onLogout }) {
+  const insets = useSafeAreaInsets();
+  // Рассчитываем высоту твоей панели управления (из предыдущего шага)
+  const TAB_BAR_HEIGHT = 70 + insets.bottom;
   const [text, setText] = useState("");
   const [workouts, setWorkouts] = useState([]);
   const [selectedCat, setSelectedCat] = useState(CATEGORIES[0]);
@@ -142,7 +146,7 @@ export default function HomeScreen({ navigation, profileId, onLogout }) {
   };
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, { paddingTop: insets.top > 0 ? insets.top + 10 : 20 }]}>
       {/* --- HEADER --- */}
       <View style={styles.topHeader}>
         <Text style={styles.header}>Мой Тренер 💪</Text>
@@ -238,12 +242,10 @@ export default function HomeScreen({ navigation, profileId, onLogout }) {
       <FlatList
         data={workouts}
         keyExtractor={(item) => item.id}
+        contentContainerStyle={{ paddingBottom: TAB_BAR_HEIGHT + 20 }}
         renderItem={({ item }) => (
           <View
-            style={[
-              styles.item,
-              { borderLeftColor: item.category.color, borderLeftWidth: 5 },
-            ]}
+            style={[styles.item, { borderLeftColor: item.category.color, borderLeftWidth: 5 }]}
           >
             <View style={styles.itemContent}>
               <View style={styles.itemHeader}>
@@ -354,7 +356,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#F2F2F7",
-    paddingTop: 60,
     paddingHorizontal: 20,
   },
   topHeader: {

@@ -1,9 +1,11 @@
 import React from 'react';
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, TouchableOpacity, StyleSheet, Platform } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Ionicons } from '@expo/vector-icons';
+// Импортируем хук для работы с безопасными зонами
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-// Screens
+// Твои экраны (оставляем без изменений)
 import HomeScreen from '../screens/HomeScreen';
 import TrainingGraphScreen from '../screens/TrainingGraphScreen';
 import SettingsScreen from '../screens/SettingsScreen';
@@ -12,10 +14,12 @@ import AddActionScreen from '../screens/AddActionScreen';
 
 const Tab = createBottomTabNavigator();
 
-const CustomTabBarButton = ({ children, onPress }) => (
+// Кнопка "+" в центре
+const CustomTabBarButton = ({ children, onPress, bottomInset }) => (
     <TouchableOpacity
         style={{
-            top: -30, // Float above the bar
+            // Сдвигаем кнопку вверх относительно динамического низа
+            top: -30,
             justifyContent: 'center',
             alignItems: 'center',
             ...styles.shadow
@@ -38,11 +42,16 @@ const CustomTabBarButton = ({ children, onPress }) => (
 export default function TabNavigator({ route }) {
     const { profileId, onLogout } = route.params || {};
 
+    // Получаем значение системного отступа снизу
+    const insets = useSafeAreaInsets();
+
+    const bottomPadding = insets.bottom > 0 ? insets.bottom : 20;
+
     return (
         <Tab.Navigator
             screenOptions={{
                 tabBarShowLabel: true,
-                headerShown: false, // Hide header by default, screens might have their own or custom headers
+                headerShown: false,
                 tabBarStyle: {
                     position: 'absolute',
                     bottom: 0,
@@ -50,20 +59,22 @@ export default function TabNavigator({ route }) {
                     right: 0,
                     elevation: 0,
                     backgroundColor: '#ffffff',
-                    height: 100, // Taller to clear system buttons
-                    paddingBottom: 30, // Push content up
-                    paddingTop: 10,
+                    height: 70 + insets.bottom,
+                    // Этот отступ вытолкнет иконки ВЫШЕ кнопок телефона
+                    paddingBottom: bottomPadding,
+                    paddingTop: 12,
                     borderTopWidth: 0,
+                    borderTopLeftRadius: 20,
+                    borderTopRightRadius: 20,
                     ...styles.shadow
                 },
                 tabBarActiveTintColor: '#3b0066',
                 tabBarInactiveTintColor: '#748c94',
                 tabBarLabelStyle: {
                     fontSize: 10,
-                    fontWeight: '600',
-                    marginTop: 5,
-                    textTransform: 'uppercase'
-                }
+                    fontWeight: '700',
+                    marginBottom: Platform.OS === 'android' ? 5 : 0,
+                },
             }}
         >
             <Tab.Screen
@@ -97,7 +108,7 @@ export default function TabNavigator({ route }) {
                     tabBarButton: (props) => (
                         <CustomTabBarButton {...props} />
                     ),
-                    tabBarLabel: () => null, // No label for the center button
+                    tabBarLabel: () => null,
                 }}
             />
             <Tab.Screen
