@@ -11,12 +11,13 @@ import TrainingGraphScreen from '../screens/TrainingGraphScreen';
 import SettingsScreen from '../screens/SettingsScreen';
 import CalendarScreen from '../screens/CalendarScreen';
 import AddActionScreen from '../screens/AddActionScreen';
+import ScaleButton from '../components/ScaleButton';
 
 const Tab = createBottomTabNavigator();
 
 // Кнопка "+" в центре
 const CustomTabBarButton = ({ children, onPress, bottomInset }) => (
-    <TouchableOpacity
+    <ScaleButton
         style={{
             // Сдвигаем кнопку вверх относительно динамического низа
             top: -30,
@@ -36,7 +37,7 @@ const CustomTabBarButton = ({ children, onPress, bottomInset }) => (
         }}>
             <Ionicons name="add" size={40} color="#fff" />
         </View>
-    </TouchableOpacity>
+    </ScaleButton>
 );
 
 export default function TabNavigator({ route }) {

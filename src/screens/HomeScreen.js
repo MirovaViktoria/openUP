@@ -11,6 +11,7 @@ import { Ionicons } from "@expo/vector-icons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useFocusEffect } from '@react-navigation/native';
+import ScaleButton from '../components/ScaleButton';
 
 export default function HomeScreen({ navigation, profileId, onLogout }) {
   const insets = useSafeAreaInsets();
@@ -59,15 +60,15 @@ export default function HomeScreen({ navigation, profileId, onLogout }) {
       <View style={styles.topHeader}>
         <Text style={styles.header}>Мой Тренер 💪</Text>
         <View style={styles.headerButtons}>
-          <TouchableOpacity
+          <ScaleButton
             onPress={() => navigation.navigate("Settings", { profileId, onLogout })}
             style={styles.iconButton}
           >
             <Ionicons name="settings-outline" size={24} color="#007AFF" />
-          </TouchableOpacity>
-          <TouchableOpacity onPress={handleLogout} style={styles.iconButton}>
+          </ScaleButton>
+          <ScaleButton onPress={handleLogout} style={styles.iconButton}>
             <Ionicons name="log-out-outline" size={24} color="#FF3B30" />
-          </TouchableOpacity>
+          </ScaleButton>
         </View>
       </View>
 
