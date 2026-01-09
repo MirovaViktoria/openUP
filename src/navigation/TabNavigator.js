@@ -7,7 +7,7 @@ import { Ionicons } from '@expo/vector-icons';
 import HomeScreen from '../screens/HomeScreen';
 import TrainingGraphScreen from '../screens/TrainingGraphScreen';
 import SettingsScreen from '../screens/SettingsScreen';
-import DiscoverScreen from '../screens/DiscoverScreen';
+import CalendarScreen from '../screens/CalendarScreen';
 import AddActionScreen from '../screens/AddActionScreen';
 
 const Tab = createBottomTabNavigator();
@@ -26,9 +26,11 @@ const CustomTabBarButton = ({ children, onPress }) => (
             width: 70,
             height: 70,
             borderRadius: 35,
-            backgroundColor: '#3b0066', // Deep purple from screenshot
+            backgroundColor: '#3b0066',
+            justifyContent: 'center',
+            alignItems: 'center',
         }}>
-            {children}
+            <Ionicons name="add" size={40} color="#fff" />
         </View>
     </TouchableOpacity>
 );
@@ -48,8 +50,8 @@ export default function TabNavigator({ route }) {
                     right: 0,
                     elevation: 0,
                     backgroundColor: '#ffffff',
-                    height: 90, // Taller tab bar to accommodate labels and touch targets
-                    paddingBottom: 20, // Push content up for home indicator usually, check safe area
+                    height: 100, // Taller to clear system buttons
+                    paddingBottom: 30, // Push content up
                     paddingTop: 10,
                     borderTopWidth: 0,
                     ...styles.shadow
@@ -77,14 +79,12 @@ export default function TabNavigator({ route }) {
             />
             <Tab.Screen
                 name="Calendar"
-                component={TrainingGraphScreen}
+                component={CalendarScreen}
                 options={{
                     tabBarLabel: 'КАЛЕНДАРЬ',
                     tabBarIcon: ({ focused }) => (
                         <Ionicons name={focused ? "calendar" : "calendar-outline"} size={24} color={focused ? "#3b0066" : "#748c94"} />
                     ),
-                    headerShown: true, // TrainingGraph might need a header
-                    title: 'График тренировок'
                 }}
             />
             <Tab.Screen
@@ -101,13 +101,15 @@ export default function TabNavigator({ route }) {
                 }}
             />
             <Tab.Screen
-                name="Discover"
-                component={DiscoverScreen}
+                name="TrainingGraph"
+                component={TrainingGraphScreen}
                 options={{
-                    tabBarLabel: 'ОБНАРУЖИТЬ',
+                    tabBarLabel: 'ГРАФИК',
                     tabBarIcon: ({ focused }) => (
-                        <Ionicons name={focused ? "compass" : "compass-outline"} size={24} color={focused ? "#3b0066" : "#748c94"} />
+                        <Ionicons name={focused ? "bar-chart" : "bar-chart-outline"} size={24} color={focused ? "#3b0066" : "#748c94"} />
                     ),
+                    headerShown: true,
+                    title: 'График тренировок'
                 }}
             />
             <Tab.Screen
