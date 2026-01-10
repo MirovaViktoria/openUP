@@ -57,6 +57,14 @@ export default function AppNavigator() {
     }
   };
 
+  const logout = async () => {
+    try {
+      await AsyncStorage.removeItem("active_profile_id");
+      setActiveProfileId(null);
+    } catch (e) {
+      console.error("Logout failed", e);
+    }
+  };
 
   if (isLoading) return null; // Или экран загрузки
 
@@ -87,7 +95,7 @@ export default function AppNavigator() {
                     params: {
                       ...props.route.params,
                       profileId: activeProfileId,
-                      onLogout: checkAuth
+                      onLogout: logout
                     }
                   }}
                 />

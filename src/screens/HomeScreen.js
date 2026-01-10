@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   FlatList,
   SafeAreaView,
+  Alert,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -13,7 +14,8 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useFocusEffect } from '@react-navigation/native';
 import ScaleButton from '../components/ScaleButton';
 
-export default function HomeScreen({ navigation, profileId, onLogout }) {
+export default function HomeScreen({ navigation, route }) {
+  const { profileId, onLogout } = route.params || {};
   const insets = useSafeAreaInsets();
   // Рассчитываем высоту твоей панели управления (из предыдущего шага)
   const TAB_BAR_HEIGHT = 70 + insets.bottom;
@@ -21,7 +23,9 @@ export default function HomeScreen({ navigation, profileId, onLogout }) {
 
   useFocusEffect(
     useCallback(() => {
-      loadWorkouts();
+      if (profileId) {
+        loadWorkouts();
+      }
     }, [profileId])
   );
 
@@ -50,7 +54,8 @@ export default function HomeScreen({ navigation, profileId, onLogout }) {
   };
 
   const handleLogout = async () => {
-    await AsyncStorage.removeItem("active_profile_id");
+    Alert.alert("Уведомление", "Вы вышли из профиля");
+    // We removed the local removeItem call because onLogout (from AppNavigator) now handles it
     onLogout();
   };
 

@@ -61,7 +61,6 @@ export default function TabNavigator({ route }) {
                     elevation: 0,
                     backgroundColor: '#ffffff',
                     height: 70 + insets.bottom,
-                    // Этот отступ вытолкнет иконки ВЫШЕ кнопок телефона
                     paddingBottom: bottomPadding,
                     paddingTop: 12,
                     borderTopWidth: 0,
