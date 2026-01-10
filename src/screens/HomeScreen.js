@@ -13,6 +13,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useFocusEffect } from '@react-navigation/native';
 import ScaleButton from '../components/ScaleButton';
+import { COLORS } from '../constants/colors';
 
 export default function HomeScreen({ navigation, route }) {
   const { profileId, onLogout } = route.params || {};
@@ -69,10 +70,10 @@ export default function HomeScreen({ navigation, route }) {
             onPress={() => navigation.navigate("Settings", { profileId, onLogout })}
             style={styles.iconButton}
           >
-            <Ionicons name="settings-outline" size={24} color="#007AFF" />
+            <Ionicons name="settings-outline" size={24} color={COLORS.action} />
           </ScaleButton>
           <ScaleButton onPress={handleLogout} style={styles.iconButton}>
-            <Ionicons name="log-out-outline" size={24} color="#FF3B30" />
+            <Ionicons name="log-out-outline" size={24} color={COLORS.error} />
           </ScaleButton>
         </View>
       </View>
@@ -115,13 +116,13 @@ export default function HomeScreen({ navigation, route }) {
             </View>
             {/* Delete button (optional, keep if user wants to manage list here) */}
             <TouchableOpacity onPress={() => deleteWorkout(item.id)} style={{ padding: 5 }}>
-              <Ionicons name="trash-outline" size={22} color="#C7C7CC" />
+              <Ionicons name="trash-outline" size={22} color={COLORS.textSecondary} />
             </TouchableOpacity>
           </View>
         )}
         ListEmptyComponent={
           <View style={{ alignItems: 'center', marginTop: 50 }}>
-            <Text style={{ color: '#8E8E93', fontSize: 16 }}>Нет записей. Нажми "+", чтобы добавить.</Text>
+            <Text style={{ color: COLORS.textSecondary, fontSize: 16 }}>Нет записей. Нажми "+", чтобы добавить.</Text>
           </View>
         }
       />
@@ -133,7 +134,7 @@ export default function HomeScreen({ navigation, route }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#F2F2F7",
+    backgroundColor: COLORS.background,
     paddingHorizontal: 20,
   },
   topHeader: {
@@ -145,7 +146,7 @@ const styles = StyleSheet.create({
   header: {
     fontSize: 28,
     fontWeight: "bold",
-    color: "#1C1C1E",
+    color: COLORS.textMain,
   },
   headerButtons: {
     flexDirection: "row",
@@ -159,7 +160,7 @@ const styles = StyleSheet.create({
   },
   // List Item Styles
   item: {
-    backgroundColor: "#FFF",
+    backgroundColor: COLORS.surface,
     padding: 16,
     borderRadius: 16,
     marginBottom: 12,
@@ -184,16 +185,16 @@ const styles = StyleSheet.create({
   itemCatLabel: {
     fontSize: 13,
     fontWeight: '600',
-    color: '#3A3A3C',
+    color: COLORS.textMain,
     marginRight: 8,
   },
   itemDate: {
     fontSize: 12,
-    color: '#8E8E93',
+    color: COLORS.textSecondary,
   },
   itemText: {
     fontSize: 18,
-    color: "#1C1C1E",
+    color: COLORS.textMain,
     fontWeight: "600",
     marginBottom: 8,
   },
@@ -202,7 +203,7 @@ const styles = StyleSheet.create({
     flexWrap: 'wrap',
   },
   itemUnitTag: {
-    backgroundColor: '#F2F2F7',
+    backgroundColor: COLORS.primaryLight,
     paddingHorizontal: 8,
     paddingVertical: 4,
     borderRadius: 6,
@@ -211,6 +212,6 @@ const styles = StyleSheet.create({
   },
   itemUnitText: {
     fontSize: 12,
-    color: '#3A3A3C',
+    color: COLORS.textMain,
   },
 });

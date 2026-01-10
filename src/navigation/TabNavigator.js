@@ -4,6 +4,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Ionicons } from '@expo/vector-icons';
 // Импортируем хук для работы с безопасными зонами
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { COLORS } from '../constants/colors';
 
 // Твои экраны (оставляем без изменений)
 import HomeScreen from '../screens/HomeScreen';
@@ -31,7 +32,7 @@ const CustomTabBarButton = ({ children, onPress, bottomInset }) => (
             width: 70,
             height: 70,
             borderRadius: 35,
-            backgroundColor: '#3b0066',
+            backgroundColor: COLORS.primaryBright,
             justifyContent: 'center',
             alignItems: 'center',
         }}>
@@ -59,7 +60,7 @@ export default function TabNavigator({ route }) {
                     left: 0,
                     right: 0,
                     elevation: 0,
-                    backgroundColor: '#ffffff',
+                    backgroundColor: COLORS.surface,
                     height: 70 + insets.bottom,
                     paddingBottom: bottomPadding,
                     paddingTop: 12,
@@ -68,8 +69,8 @@ export default function TabNavigator({ route }) {
                     borderTopRightRadius: 20,
                     ...styles.shadow
                 },
-                tabBarActiveTintColor: '#3b0066',
-                tabBarInactiveTintColor: '#748c94',
+                tabBarActiveTintColor: COLORS.primary,
+                tabBarInactiveTintColor: COLORS.tabBarInactive,
                 tabBarLabelStyle: {
                     fontSize: 10,
                     fontWeight: '700',
@@ -84,7 +85,7 @@ export default function TabNavigator({ route }) {
                 options={{
                     tabBarLabel: 'СЕГОДНЯ',
                     tabBarIcon: ({ focused }) => (
-                        <Ionicons name={focused ? "ellipse" : "ellipse-outline"} size={24} color={focused ? "#3b0066" : "#748c94"} />
+                        <Ionicons name={focused ? "ellipse" : "ellipse-outline"} size={24} color={focused ? COLORS.primary : COLORS.tabBarInactive} />
                     ),
                 }}
             />
@@ -94,7 +95,7 @@ export default function TabNavigator({ route }) {
                 options={{
                     tabBarLabel: 'КАЛЕНДАРЬ',
                     tabBarIcon: ({ focused }) => (
-                        <Ionicons name={focused ? "calendar" : "calendar-outline"} size={24} color={focused ? "#3b0066" : "#748c94"} />
+                        <Ionicons name={focused ? "calendar" : "calendar-outline"} size={24} color={focused ? COLORS.primary : COLORS.tabBarInactive} />
                     ),
                 }}
             />
@@ -118,7 +119,7 @@ export default function TabNavigator({ route }) {
                 options={{
                     tabBarLabel: 'ГРАФИК',
                     tabBarIcon: ({ focused }) => (
-                        <Ionicons name={focused ? "bar-chart" : "bar-chart-outline"} size={24} color={focused ? "#3b0066" : "#748c94"} />
+                        <Ionicons name={focused ? "bar-chart" : "bar-chart-outline"} size={24} color={focused ? COLORS.primary : COLORS.tabBarInactive} />
                     ),
                     headerShown: true,
                     title: 'График тренировок'
@@ -131,7 +132,7 @@ export default function TabNavigator({ route }) {
                 options={{
                     tabBarLabel: 'ПРОФИЛЬ',
                     tabBarIcon: ({ focused }) => (
-                        <Ionicons name={focused ? "person" : "person-outline"} size={24} color={focused ? "#3b0066" : "#748c94"} />
+                        <Ionicons name={focused ? "person" : "person-outline"} size={24} color={focused ? COLORS.primary : COLORS.tabBarInactive} />
                     ),
                     headerShown: true,
                     title: 'Управление профилем'
@@ -143,7 +144,7 @@ export default function TabNavigator({ route }) {
 
 const styles = StyleSheet.create({
     shadow: {
-        shadowColor: '#7F5DF0',
+        shadowColor: COLORS.primary,
         shadowOffset: {
             width: 0,
             height: 10,

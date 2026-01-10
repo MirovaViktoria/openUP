@@ -15,10 +15,11 @@ import { Ionicons } from "@expo/vector-icons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { COLORS } from '../constants/colors';
 
 const CATEGORIES = [
-    { id: "power", label: "Силовая", icon: "barbell", color: "#FF9500", defaultUnits: ["weight", "sets", "reps"] },
-    { id: "cardio", label: "Кардио", icon: "heart", color: "#FF2D55", defaultUnits: ["time", "distance"] },
+    { id: "power", label: "Силовая", icon: "barbell", color: COLORS.workoutStrength, defaultUnits: ["weight", "sets", "reps"] },
+    { id: "cardio", label: "Кардио", icon: "heart", color: COLORS.workoutCardio, defaultUnits: ["time", "distance"] },
     { id: "yoga", label: "Йога", icon: "body", color: "#5856D6", defaultUnits: ["time"] },
     { id: "study", label: "Учеба", icon: "book", color: "#007AFF", defaultUnits: ["time", "pages"] },
     { id: "meditation", label: "Медитация", icon: "leaf", color: "#34C759", defaultUnits: ["time"] },
@@ -150,9 +151,9 @@ export default function AddActionScreen({ navigation, route }) {
                     >
                         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                             <Ionicons name={selectedCat.icon} size={24} color={selectedCat.color} style={{ marginRight: 10 }} />
-                            <Text style={{ fontSize: 16, fontWeight: '600', color: '#1C1C1E' }}>{selectedCat.label}</Text>
+                            <Text style={{ fontSize: 16, fontWeight: '600', color: COLORS.textMain }}>{selectedCat.label}</Text>
                         </View>
-                        <Ionicons name="chevron-down" size={20} color="#8E8E93" />
+                        <Ionicons name="chevron-down" size={20} color={COLORS.textSecondary} />
                     </TouchableOpacity>
 
                     {/* Units Constructor */}
@@ -160,7 +161,7 @@ export default function AddActionScreen({ navigation, route }) {
                         {activeUnits.map((unit, index) => (
                             <View key={index} style={styles.unitRow}>
                                 <View style={styles.unitLabelContainer}>
-                                    <Ionicons name={unit.icon} size={16} color="#555" style={{ marginRight: 5 }} />
+                                    <Ionicons name={unit.icon} size={16} color={COLORS.textSecondary} style={{ marginRight: 5 }} />
                                     <Text style={styles.unitLabel}>{unit.label}</Text>
                                 </View>
                                 <TextInput
@@ -171,13 +172,13 @@ export default function AddActionScreen({ navigation, route }) {
                                     onChangeText={(val) => updateUnitValue(index, val)}
                                 />
                                 <TouchableOpacity onPress={() => removeUnit(index)} style={styles.removeUnitBtn}>
-                                    <Ionicons name="close-circle" size={20} color="#FF3B30" />
+                                    <Ionicons name="close-circle" size={20} color={COLORS.error} />
                                 </TouchableOpacity>
                             </View>
                         ))}
 
                         <TouchableOpacity style={styles.addUnitButton} onPress={() => setShowUnitModal(true)}>
-                            <Ionicons name="add-circle-outline" size={20} color="#007AFF" />
+                            <Ionicons name="add-circle-outline" size={20} color={COLORS.action} />
                             <Text style={styles.addUnitText}>Добавить параметр</Text>
                         </TouchableOpacity>
                     </View>
@@ -188,7 +189,7 @@ export default function AddActionScreen({ navigation, route }) {
                             style={styles.dateButton}
                             onPress={() => setShowPicker(true)}
                         >
-                            <Ionicons name="calendar-outline" size={20} color="#007AFF" />
+                            <Ionicons name="calendar-outline" size={20} color={COLORS.action} />
                             <Text style={styles.dateText}>
                                 {date.toLocaleDateString("ru-RU")}
                             </Text>
@@ -228,7 +229,7 @@ export default function AddActionScreen({ navigation, route }) {
                                     <Ionicons name={cat.icon} size={24} color={cat.color} style={{ marginRight: 15 }} />
                                     <Text style={styles.modalItemText}>{cat.label}</Text>
                                     {selectedCat.id === cat.id && (
-                                        <Ionicons name="checkmark" size={24} color="#007AFF" style={{ marginLeft: 'auto' }} />
+                                        <Ionicons name="checkmark" size={24} color={COLORS.primary} style={{ marginLeft: 'auto' }} />
                                     )}
                                 </TouchableOpacity>
                             ))}
@@ -257,7 +258,7 @@ export default function AddActionScreen({ navigation, route }) {
                                         style={styles.unitGridItem}
                                         onPress={() => addUnit(key)}
                                     >
-                                        <Ionicons name={u.icon} size={24} color="#007AFF" />
+                                        <Ionicons name={u.icon} size={24} color={COLORS.primary} />
                                         <Text style={styles.unitGridText}>{u.label}</Text>
                                     </TouchableOpacity>
                                 );
@@ -280,18 +281,18 @@ export default function AddActionScreen({ navigation, route }) {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: "#F2F2F7",
+        backgroundColor: COLORS.background,
         paddingHorizontal: 20,
     },
     header: {
         fontSize: 24,
         fontWeight: "bold",
-        color: "#1C1C1E",
+        color: COLORS.textMain,
         marginBottom: 20,
         textAlign: 'center'
     },
     card: {
-        backgroundColor: "#FFF",
+        backgroundColor: COLORS.surface,
         padding: 20,
         borderRadius: 20,
         marginBottom: 20,
@@ -307,7 +308,7 @@ const styles = StyleSheet.create({
         borderColor: "#E5E5EA",
         paddingBottom: 8,
         marginBottom: 15,
-        color: "#1C1C1E",
+        color: COLORS.textMain,
     },
     selectorButton: {
         flexDirection: 'row',
@@ -334,16 +335,16 @@ const styles = StyleSheet.create({
     },
     unitLabel: {
         fontSize: 14,
-        color: '#3A3A3C',
+        color: COLORS.textMain,
     },
     unitInput: {
         flex: 1,
-        backgroundColor: '#F2F2F7',
+        backgroundColor: COLORS.background,
         borderRadius: 8,
         padding: 8,
         fontSize: 16,
         marginRight: 10,
-        color: "#1C1C1E",
+        color: COLORS.textMain,
     },
     removeUnitBtn: {
         padding: 4,
@@ -354,12 +355,12 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         padding: 10,
         borderWidth: 1,
-        borderColor: '#007AFF',
+        borderColor: COLORS.action,
         borderStyle: 'dashed',
         borderRadius: 8,
     },
     addUnitText: {
-        color: '#007AFF',
+        color: COLORS.action,
         marginLeft: 5,
         fontWeight: '600',
     },
@@ -371,7 +372,7 @@ const styles = StyleSheet.create({
         marginBottom: 20,
     },
     dateButton: {
-        backgroundColor: "#F2F2F7",
+        backgroundColor: COLORS.background,
         paddingHorizontal: 15,
         paddingVertical: 10,
         borderRadius: 10,
@@ -380,22 +381,22 @@ const styles = StyleSheet.create({
     },
     dateText: {
         fontSize: 14,
-        color: "#007AFF",
+        color: COLORS.action,
         marginLeft: 5,
         fontWeight: '600'
     },
     addButton: {
-        backgroundColor: "#007AFF",
+        backgroundColor: COLORS.primary,
         paddingVertical: 12,
         paddingHorizontal: 25,
         borderRadius: 12,
-        shadowColor: "#007AFF",
+        shadowColor: COLORS.primary,
         shadowOffset: { width: 0, height: 4 },
         shadowOpacity: 0.3,
         shadowRadius: 8,
         alignItems: 'center'
     },
-    addButtonText: { color: "#FFF", fontWeight: "bold", fontSize: 16 },
+    addButtonText: { color: COLORS.surface, fontWeight: "bold", fontSize: 16 },
 
     // Modals
     modalOverlay: {
@@ -406,7 +407,7 @@ const styles = StyleSheet.create({
         padding: 20,
     },
     modalContent: {
-        backgroundColor: '#FFF',
+        backgroundColor: COLORS.surface,
         width: '100%',
         borderRadius: 20,
         padding: 20,
@@ -417,18 +418,18 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         marginBottom: 15,
         textAlign: 'center',
-        color: '#1C1C1E',
+        color: COLORS.textMain,
     },
     modalItem: {
         flexDirection: 'row',
         alignItems: 'center',
         paddingVertical: 15,
         borderBottomWidth: 1,
-        borderBottomColor: '#F2F2F7',
+        borderBottomColor: COLORS.background,
     },
     modalItemText: {
         fontSize: 17,
-        color: '#1C1C1E',
+        color: COLORS.textMain,
     },
     closeModalBtn: {
         marginTop: 15,
@@ -437,7 +438,7 @@ const styles = StyleSheet.create({
     },
     closeModalText: {
         fontSize: 17,
-        color: '#007AFF',
+        color: COLORS.action,
         fontWeight: '600',
     },
     unitGrid: {
@@ -447,7 +448,7 @@ const styles = StyleSheet.create({
     },
     unitGridItem: {
         width: '30%',
-        backgroundColor: '#F9F9F9',
+        backgroundColor: COLORS.background,
         borderRadius: 12,
         padding: 15,
         alignItems: 'center',
@@ -457,6 +458,6 @@ const styles = StyleSheet.create({
         marginTop: 8,
         fontSize: 12,
         textAlign: 'center',
-        color: '#3A3A3C',
+        color: COLORS.textMain,
     },
 });

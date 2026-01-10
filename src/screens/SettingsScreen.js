@@ -9,6 +9,7 @@ import {
     ScrollView,
 } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { COLORS } from '../constants/colors';
 
 export default function SettingsScreen({ route, navigation }) {
     const { profileId, onLogout } = route.params;
@@ -130,7 +131,7 @@ export default function SettingsScreen({ route, navigation }) {
             </View>
 
             <View style={[styles.section, styles.dangerZone]}>
-                <Text style={[styles.sectionTitle, { color: "#FF3B30" }]}>
+                <Text style={[styles.sectionTitle, { color: COLORS.error }]}>
                     Опасная зона
                 </Text>
                 <TouchableOpacity
@@ -147,11 +148,11 @@ export default function SettingsScreen({ route, navigation }) {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: "#F2F2F7",
+        backgroundColor: COLORS.background,
         padding: 20,
     },
     section: {
-        backgroundColor: "#FFF",
+        backgroundColor: COLORS.surface,
         borderRadius: 12,
         padding: 20,
         marginBottom: 20,
@@ -161,32 +162,32 @@ const styles = StyleSheet.create({
         fontSize: 18,
         fontWeight: "bold",
         marginBottom: 15,
-        color: "#1C1C1E",
+        color: COLORS.textMain,
     },
     input: {
         borderBottomWidth: 1,
-        borderBottomColor: "#E5E5EA",
+        borderBottomColor: COLORS.primaryLight,
         paddingVertical: 10,
         fontSize: 16,
         marginBottom: 15,
     },
     button: {
-        backgroundColor: "#007AFF",
+        backgroundColor: COLORS.primary,
         padding: 15,
         borderRadius: 8,
         alignItems: "center",
     },
     deleteButton: {
-        backgroundColor: "#FF3B30",
+        backgroundColor: COLORS.error,
     },
     buttonText: {
-        color: "#FFF",
+        color: COLORS.surface,
         fontWeight: "bold",
         fontSize: 16,
     },
     dangerZone: {
         marginTop: 20,
         borderWidth: 1,
-        borderColor: "#FF3B30",
+        borderColor: COLORS.error,
     },
 });
