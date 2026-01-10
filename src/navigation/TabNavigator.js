@@ -92,6 +92,7 @@ export default function TabNavigator({ route }) {
             <Tab.Screen
                 name="Calendar"
                 component={CalendarScreen}
+                initialParams={{ profileId }}
                 options={{
                     tabBarLabel: 'КАЛЕНДАРЬ',
                     tabBarIcon: ({ focused }) => (
