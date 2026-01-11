@@ -114,10 +114,20 @@ export default function HomeScreen({ navigation, route }) {
                 </View>
               )}
             </View>
-            {/* Delete button (optional, keep if user wants to manage list here) */}
-            <TouchableOpacity onPress={() => deleteWorkout(item.id)} style={{ padding: 5 }}>
-              <Ionicons name="trash-outline" size={22} color={COLORS.textSecondary} />
-            </TouchableOpacity>
+
+            {/* Actions: Edit & Delete */}
+            <View style={{ alignItems: 'center' }}>
+              <TouchableOpacity
+                onPress={() => navigation.navigate("Add", { profileId, workout: item, isEditing: true })}
+                style={{ padding: 5, marginBottom: 5 }}
+              >
+                <Ionicons name="settings-outline" size={22} color={COLORS.action} />
+              </TouchableOpacity>
+
+              <TouchableOpacity onPress={() => deleteWorkout(item.id)} style={{ padding: 5 }}>
+                <Ionicons name="trash-outline" size={22} color={COLORS.textSecondary} />
+              </TouchableOpacity>
+            </View>
           </View>
         )}
         ListEmptyComponent={

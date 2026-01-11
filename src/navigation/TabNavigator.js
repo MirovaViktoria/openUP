@@ -104,6 +104,12 @@ export default function TabNavigator({ route }) {
                 name="Add"
                 component={AddActionScreen}
                 initialParams={{ profileId }}
+                listeners={({ navigation }) => ({
+                    tabPress: (e) => {
+                        e.preventDefault();
+                        navigation.navigate("Add", { profileId, isEditing: false, workout: null });
+                    },
+                })}
                 options={{
                     tabBarIcon: ({ focused }) => (
                         <Ionicons name="add" size={40} color="#fff" />

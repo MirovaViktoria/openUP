@@ -37,7 +37,7 @@ const UNITS = {
 
 export default function AddActionScreen({ navigation, route }) {
     const insets = useSafeAreaInsets();
-    const { profileId } = route.params || {};
+    const { profileId, workout, isEditing } = route.params || {};
 
     const [text, setText] = useState("");
     const [selectedCat, setSelectedCat] = useState(CATEGORIES[0]);
@@ -51,14 +51,45 @@ export default function AddActionScreen({ navigation, route }) {
 
     // Load default units when category changes
     useEffect(() => {
-        if (selectedCat) {
+        if (selectedCat && !isEditing) {
             const defaults = selectedCat.defaultUnits.map(unitId => ({
                 ...UNITS[unitId],
                 value: "",
             }));
             setActiveUnits(defaults);
         }
-    }, [selectedCat]);
+    }, [selectedCat, isEditing]);
+
+    // Handle Edit Mode
+    useEffect(() => {
+        if (isEditing && workout) {
+            setText(workout.name);
+
+            // Find category ref
+            const cat = CATEGORIES.find(c => c.id === workout.category.id) || CATEGORIES[0];
+            setSelectedCat(cat);
+
+            // Parse Date (DD.MM.YYYY)
+            if (workout.date) {
+                const parts = workout.date.split('.');
+                if (parts.length === 3) {
+                    // new Date(year, monthIndex, day)
+                    const d = new Date(parseInt(parts[2]), parseInt(parts[1]) - 1, parseInt(parts[0]));
+                    setDate(d);
+                }
+            }
+
+            // Set Units
+            if (workout.units) {
+                setActiveUnits(workout.units);
+            }
+        } else if (!isEditing) {
+            // Reset if switching to Add mode (though TabNavigator handles this, safe to check)
+            setText("");
+            setDate(new Date());
+            // Unit reset handled by the other useEffect when selectedCat changes or initially
+        }
+    }, [isEditing, workout]);
 
     const onChangeDate = (event, selectedDate) => {
         setShowPicker(false);
@@ -104,10 +135,22 @@ export default function AddActionScreen({ navigation, route }) {
 
                 // Load existing workouts
                 const savedData = await AsyncStorage.getItem(`@workout_logs_${profileId}`);
-                const currentWorkouts = savedData ? JSON.parse(savedData) : [];
+                let currentWorkouts = savedData ? JSON.parse(savedData) : [];
 
-                const newWorkouts = [newEntry, ...currentWorkouts];
-                await AsyncStorage.setItem(`@workout_logs_${profileId}`, JSON.stringify(newWorkouts));
+                if (isEditing) {
+                    // Update existing
+                    const index = currentWorkouts.findIndex(w => w.id === workout.id);
+                    if (index !== -1) {
+                        // Preserve original ID
+                        newEntry.id = workout.id;
+                        currentWorkouts[index] = newEntry;
+                    }
+                } else {
+                    // Create new
+                    currentWorkouts = [newEntry, ...currentWorkouts];
+                }
+
+                await AsyncStorage.setItem(`@workout_logs_${profileId}`, JSON.stringify(currentWorkouts));
 
                 setText("");
                 // Reset units to defaults (clearing values)
@@ -132,7 +175,7 @@ export default function AddActionScreen({ navigation, route }) {
 
     return (
         <View style={[styles.container, { paddingTop: insets.top > 0 ? insets.top + 10 : 20 }]}>
-            <Text style={styles.header}>Добавить активность</Text>
+            <Text style={styles.header}>{isEditing ? "Редактировать активность" : "Добавить активность"}</Text>
 
             <ScrollView contentContainerStyle={{ paddingBottom: 100 }}>
                 {/* --- ADD CARD --- */}
@@ -197,7 +240,7 @@ export default function AddActionScreen({ navigation, route }) {
                     </View>
 
                     <TouchableOpacity style={styles.addButton} onPress={addWorkout}>
-                        <Text style={styles.addButtonText}>Сохранить</Text>
+                        <Text style={styles.addButtonText}>{isEditing ? "Сохранить изменения" : "Сохранить"}</Text>
                     </TouchableOpacity>
                 </View>
             </ScrollView>
