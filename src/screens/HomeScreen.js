@@ -83,6 +83,9 @@ export default function HomeScreen({ navigation, route }) {
         data={workouts}
         keyExtractor={(item) => item.id}
         contentContainerStyle={{ paddingBottom: TAB_BAR_HEIGHT + 20 }}
+        showsVerticalScrollIndicator={false}
+        showsHorizontalScrollIndicator={false}
+        overScrollMode="never"
         renderItem={({ item }) => (
           <View
             style={[styles.item, { borderLeftColor: item.category.color, borderLeftWidth: 5 }]}

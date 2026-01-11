@@ -5,6 +5,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useFocusEffect } from '@react-navigation/native';
 import { Ionicons } from "@expo/vector-icons";
 import { COLORS } from '../constants/colors';
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 // Configure locale for Russian
 LocaleConfig.locales['ru'] = {
@@ -25,6 +26,8 @@ export default function CalendarScreen({ route }) {
     const [workouts, setWorkouts] = useState([]);
     const [markedDates, setMarkedDates] = useState({});
     const [dayWorkouts, setDayWorkouts] = useState([]);
+    const insets = useSafeAreaInsets();
+    const TAB_BAR_HEIGHT = 70 + insets.bottom;
 
     useFocusEffect(
         useCallback(() => {
@@ -156,6 +159,9 @@ export default function CalendarScreen({ route }) {
                 <FlatList
                     data={dayWorkouts}
                     keyExtractor={(item) => item.id}
+                    showsVerticalScrollIndicator={false}
+                    showsHorizontalScrollIndicator={false}
+                    overScrollMode="never"
                     renderItem={({ item }) => (
                         <View style={[styles.item, { borderLeftColor: item.category.color, borderLeftWidth: 5 }]}>
                             <View style={styles.itemContent}>
@@ -188,7 +194,7 @@ export default function CalendarScreen({ route }) {
                             <Text style={styles.emptyText}>Нет тренировок на этот день</Text>
                         </View>
                     }
-                    contentContainerStyle={{ paddingBottom: 20 }}
+                    contentContainerStyle={{ paddingBottom: TAB_BAR_HEIGHT + 20 }}
                 />
             </View>
         </View>

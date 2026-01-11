@@ -97,10 +97,14 @@ export default function ProfileSelectScreen({ navigation, onSelectProfile }) {
       <Text style={styles.title}>Выберите профиль</Text>
 
       <FlatList
+        style={styles.flatList}
         data={profiles}
         keyExtractor={(item) => item.id}
         renderItem={renderItem}
         contentContainerStyle={styles.list}
+        showsVerticalScrollIndicator={false}
+        showsHorizontalScrollIndicator={false}
+        overScrollMode="never"
         ListEmptyComponent={
           <Text style={styles.emptyText}>Нет профилей. Создайте первый!</Text>
         }
@@ -173,6 +177,10 @@ const styles = StyleSheet.create({
   },
   list: {
     paddingBottom: 20,
+  },
+  flatList: {
+    flex: 1,
+    width: "100%",
   },
   profileCard: {
     flexDirection: "row",
