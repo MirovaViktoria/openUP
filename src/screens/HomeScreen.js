@@ -60,11 +60,19 @@ export default function HomeScreen({ navigation, route }) {
     onLogout();
   };
 
+  const getGreeting = () => {
+    const hour = new Date().getHours();
+    if (hour >= 5 && hour < 12) return "Доброе утро";
+    if (hour >= 12 && hour < 18) return "Добрый день";
+    if (hour >= 18 && hour < 23) return "Добрый вечер";
+    return "Доброй ночи";
+  };
+
   return (
     <View style={[styles.container, { paddingTop: insets.top > 0 ? insets.top + 10 : 20 }]}>
       {/* --- HEADER --- */}
       <View style={styles.topHeader}>
-        <Text style={styles.header}>Мой Тренер 💪</Text>
+        <Text style={styles.header}>{getGreeting()} 💪</Text>
         <View style={styles.headerButtons}>
           <ScaleButton
             onPress={() => navigation.navigate("Settings", { profileId, onLogout })}
