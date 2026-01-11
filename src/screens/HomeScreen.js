@@ -62,17 +62,67 @@ export default function HomeScreen({ navigation, route }) {
 
   const getGreeting = () => {
     const hour = new Date().getHours();
-    if (hour >= 5 && hour < 12) return "Доброе утро";
-    if (hour >= 12 && hour < 18) return "Добрый день";
-    if (hour >= 18 && hour < 23) return "Добрый вечер";
-    return "Доброй ночи";
+    if (hour >= 5 && hour < 12) return "Доброе утро ☀️";
+    if (hour >= 12 && hour < 18) return "Добрый день 🌤️";
+    if (hour >= 18 && hour < 23) return "Добрый вечер  🌆";
+    return "Доброй ночи 🌙";
+  };
+
+  const getEmptyStateMessage = React.useMemo(() => {
+    const hour = new Date().getHours();
+    if (hour < 18) {
+      const morningMessages = [
+        "Сегодня трекер отдыхает 😴",
+        "Пока без подвигов 😌",
+        "Задачи не пришли. Ждём 🍵",
+        "Ноль дел — ноль стресса 🍃"
+      ];
+      return morningMessages[Math.floor(Math.random() * morningMessages.length)];
+    } else {
+      const eveningMessages = [
+        "Даже если здесь пусто — ты не зря прожила этот день ✨",
+        "Отдых тоже засчитывается 🛁",
+        "Не каждый день бывает продуктивным 🐌"
+      ];
+      return eveningMessages[Math.floor(Math.random() * eveningMessages.length)];
+    }
+  }, []); // Calculate once on mount/render cycle for stability
+
+  const handleAddBacklog = () => {
+    navigation.navigate("Add", { profileId });
+  };
+
+  const handleMarkRest = () => {
+    const restCategory = {
+      id: "rest",
+      label: "Отдых",
+      icon: "cafe",
+      color: "#8E8E93", // Neutral gray
+      defaultUnits: []
+    };
+
+    const newEntry = {
+      id: Date.now().toString(),
+      name: "Заслуженный отдых",
+      date: new Date().toLocaleDateString("ru-RU"),
+      category: restCategory,
+      units: [],
+    };
+
+    const updatedWorkouts = [newEntry, ...workouts];
+    setWorkouts(updatedWorkouts);
+    saveWorkouts(updatedWorkouts);
+  };
+
+  const handleCloseDay = () => {
+    Alert.alert("День закрыт", "Вы сегодня молодец! До встречи завтра. 🌙");
   };
 
   return (
     <View style={[styles.container, { paddingTop: insets.top > 0 ? insets.top + 10 : 20 }]}>
       {/* --- HEADER --- */}
       <View style={styles.topHeader}>
-        <Text style={styles.header}>{getGreeting()} 💪</Text>
+        <Text style={styles.header}>{getGreeting()}</Text>
         <View style={styles.headerButtons}>
           <ScaleButton
             onPress={() => navigation.navigate("Settings", { profileId, onLogout })}
@@ -88,7 +138,7 @@ export default function HomeScreen({ navigation, route }) {
 
       {/* --- LIST --- */}
       <FlatList
-        data={workouts}
+        data={workouts.filter(item => item.date === new Date().toLocaleDateString("ru-RU"))}
         keyExtractor={(item) => item.id}
         contentContainerStyle={{ paddingBottom: TAB_BAR_HEIGHT + 20 }}
         showsVerticalScrollIndicator={false}
@@ -142,8 +192,22 @@ export default function HomeScreen({ navigation, route }) {
           </View>
         )}
         ListEmptyComponent={
-          <View style={{ alignItems: 'center', marginTop: 50 }}>
-            <Text style={{ color: COLORS.textSecondary, fontSize: 16 }}>Нет записей. Нажми "+", чтобы добавить.</Text>
+          <View style={{ alignItems: 'center', marginTop: 50, paddingHorizontal: 20 }}>
+            <Text style={{ color: COLORS.textSecondary, fontSize: 24, textAlign: 'center', marginBottom: 30 }}>
+              {getEmptyStateMessage}
+            </Text>
+
+            <TouchableOpacity onPress={handleAddBacklog} style={styles.emptyButton}>
+              <Text style={styles.emptyButtonText}>Добавить задачу задним числом</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity onPress={handleMarkRest} style={styles.emptyButton}>
+              <Text style={styles.emptyButtonText}>Отметить день как отдых</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity onPress={handleCloseDay} style={styles.emptyButtonSecondary}>
+              <Text style={styles.emptyButtonTextSecondary}>Просто закрыть день</Text>
+            </TouchableOpacity>
           </View>
         }
       />
@@ -234,5 +298,38 @@ const styles = StyleSheet.create({
   itemUnitText: {
     fontSize: 12,
     color: COLORS.textMain,
+  },
+  // Empty State Buttons
+  emptyButton: {
+    backgroundColor: COLORS.surface,
+    paddingVertical: 14,
+    paddingHorizontal: 24,
+    borderRadius: 16,
+    marginBottom: 12,
+    width: '100%',
+    alignItems: 'center',
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.05,
+    shadowRadius: 4,
+    elevation: 2,
+  },
+  emptyButtonText: {
+    fontSize: 16,
+    fontWeight: "600",
+    color: COLORS.textMain,
+  },
+  emptyButtonSecondary: {
+    paddingVertical: 14,
+    paddingHorizontal: 24,
+    borderRadius: 16,
+    marginBottom: 12,
+    width: '100%',
+    alignItems: 'center',
+  },
+  emptyButtonTextSecondary: {
+    fontSize: 16,
+    fontWeight: "500",
+    color: COLORS.textSecondary,
   },
 });
