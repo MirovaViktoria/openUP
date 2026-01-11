@@ -12,6 +12,7 @@ import {
 } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Ionicons } from "@expo/vector-icons";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 export default function ProfileSelectScreen({ navigation, onSelectProfile }) {
   const [profiles, setProfiles] = useState([]);
@@ -19,6 +20,7 @@ export default function ProfileSelectScreen({ navigation, onSelectProfile }) {
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedProfile, setSelectedProfile] = useState(null);
   const [inputPassword, setInputPassword] = useState("");
+  const insets = useSafeAreaInsets();
 
   useEffect(() => {
     loadProfiles();
@@ -104,7 +106,10 @@ export default function ProfileSelectScreen({ navigation, onSelectProfile }) {
         }
       />
 
-      <TouchableOpacity style={styles.createButton} onPress={handleCreateNew}>
+      <TouchableOpacity
+        style={[styles.createButton, { marginBottom: insets.bottom > 0 ? insets.bottom + 10 : 30 }]}
+        onPress={handleCreateNew}
+      >
         <Ionicons name="add-circle-outline" size={24} color="#FFF" />
         <Text style={styles.createButtonText}>Создать профиль</Text>
       </TouchableOpacity>
@@ -211,7 +216,6 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     alignItems: "center",
     justifyContent: "center",
-    marginBottom: 40,
   },
   createButtonText: {
     color: "#FFF",
